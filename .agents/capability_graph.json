@@ -1,0 +1,498 @@
+[
+  {
+    "node_id": "call_graph",
+    "module_path": "tools/clis/call_graph.py",
+    "semantic_summary": "AST Call Graph & Program Slicing Tool",
+    "capabilities": [
+      "build call graph",
+      "callgraphvisitor",
+      "cmd callers",
+      "cmd callees",
+      "main",
+      "cmd trace"
+    ],
+    "contracts": {
+      "preconditions": [],
+      "positive_invariants": [
+        "call_graph",
+        "build",
+        "callgraphvisitor",
+        "cmd",
+        "cmd",
+        "main"
+      ],
+      "negative_constraints": []
+    },
+    "dependencies": [],
+    "symbol_anchors": [
+      {
+        "file_path": "tools/clis/call_graph.py",
+        "symbol_name": "CallGraphVisitor",
+        "symbol_kind": "Class"
+      },
+      {
+        "file_path": "tools/clis/call_graph.py",
+        "symbol_name": "build_call_graph",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/call_graph.py",
+        "symbol_name": "cmd_callers",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/call_graph.py",
+        "symbol_name": "cmd_callees",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/call_graph.py",
+        "symbol_name": "cmd_trace",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/call_graph.py",
+        "symbol_name": "main",
+        "symbol_kind": "Function"
+      }
+    ]
+  },
+  {
+    "node_id": "clis_engine",
+    "module_path": "tools/clis/clis_engine.py",
+    "semantic_summary": "ROBOT AST & Code Location Indexing System (CLIS)",
+    "capabilities": [
+      "read symbol source",
+      "get symbol structure",
+      "get symbols",
+      "parse python symbols",
+      "search symbols",
+      "main",
+      "build symbol index",
+      "parse js symbols"
+    ],
+    "contracts": {
+      "preconditions": [],
+      "positive_invariants": [
+        "clis_engine",
+        "read",
+        "get",
+        "get",
+        "parse",
+        "search"
+      ],
+      "negative_constraints": []
+    },
+    "dependencies": [],
+    "symbol_anchors": [
+      {
+        "file_path": "tools/clis/clis_engine.py",
+        "symbol_name": "parse_python_symbols",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/clis_engine.py",
+        "symbol_name": "parse_js_symbols",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/clis_engine.py",
+        "symbol_name": "build_symbol_index",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/clis_engine.py",
+        "symbol_name": "get_symbols",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/clis_engine.py",
+        "symbol_name": "search_symbols",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/clis_engine.py",
+        "symbol_name": "get_symbol_structure",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/clis_engine.py",
+        "symbol_name": "read_symbol_source",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/clis_engine.py",
+        "symbol_name": "main",
+        "symbol_kind": "Function"
+      }
+    ]
+  },
+  {
+    "node_id": "merkle_tree",
+    "module_path": "tools/clis/merkle_tree.py",
+    "semantic_summary": "ROBOT Merkle Tree & Incremental Change Detector",
+    "capabilities": [
+      "build tree",
+      "main",
+      "hash file",
+      "sync merkle",
+      "get changed files"
+    ],
+    "contracts": {
+      "preconditions": [],
+      "positive_invariants": [
+        "merkle_tree",
+        "build",
+        "main",
+        "hash",
+        "sync",
+        "get"
+      ],
+      "negative_constraints": []
+    },
+    "dependencies": [],
+    "symbol_anchors": [
+      {
+        "file_path": "tools/clis/merkle_tree.py",
+        "symbol_name": "hash_file",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/merkle_tree.py",
+        "symbol_name": "build_tree",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/merkle_tree.py",
+        "symbol_name": "get_changed_files",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/merkle_tree.py",
+        "symbol_name": "sync_merkle",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/clis/merkle_tree.py",
+        "symbol_name": "main",
+        "symbol_kind": "Function"
+      }
+    ]
+  },
+  {
+    "node_id": "capability_compiler",
+    "module_path": "tools/indexer/capability_compiler.py",
+    "semantic_summary": "Capability Compiler & Contract Generator",
+    "capabilities": [
+      "compile capability graph",
+      "main",
+      "extract python module capabilities"
+    ],
+    "contracts": {
+      "preconditions": [],
+      "positive_invariants": [
+        "capability_compiler",
+        "compile",
+        "main",
+        "extract"
+      ],
+      "negative_constraints": []
+    },
+    "dependencies": [],
+    "symbol_anchors": [
+      {
+        "file_path": "tools/indexer/capability_compiler.py",
+        "symbol_name": "extract_python_module_capabilities",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/capability_compiler.py",
+        "symbol_name": "compile_capability_graph",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/capability_compiler.py",
+        "symbol_name": "main",
+        "symbol_kind": "Function"
+      }
+    ]
+  },
+  {
+    "node_id": "find_code",
+    "module_path": "tools/indexer/find_code.py",
+    "semantic_summary": "ROBOT Code Finder CLI (with FILE_INDEX Cache)",
+    "capabilities": [
+      "main",
+      "search code",
+      "build file index",
+      "load file index"
+    ],
+    "contracts": {
+      "preconditions": [],
+      "positive_invariants": [
+        "find_code",
+        "main",
+        "search",
+        "build",
+        "load"
+      ],
+      "negative_constraints": []
+    },
+    "dependencies": [],
+    "symbol_anchors": [
+      {
+        "file_path": "tools/indexer/find_code.py",
+        "symbol_name": "build_file_index",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/find_code.py",
+        "symbol_name": "load_file_index",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/find_code.py",
+        "symbol_name": "search_code",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/find_code.py",
+        "symbol_name": "main",
+        "symbol_kind": "Function"
+      }
+    ]
+  },
+  {
+    "node_id": "find_skill",
+    "module_path": "tools/indexer/find_skill.py",
+    "semantic_summary": "ROBOT Skill Finder CLI",
+    "capabilities": [
+      "search skills",
+      "main"
+    ],
+    "contracts": {
+      "preconditions": [],
+      "positive_invariants": [
+        "find_skill",
+        "search",
+        "main"
+      ],
+      "negative_constraints": []
+    },
+    "dependencies": [],
+    "symbol_anchors": [
+      {
+        "file_path": "tools/indexer/find_skill.py",
+        "symbol_name": "search_skills",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/find_skill.py",
+        "symbol_name": "main",
+        "symbol_kind": "Function"
+      }
+    ]
+  },
+  {
+    "node_id": "index_engine",
+    "module_path": "tools/indexer/index_engine.py",
+    "semantic_summary": "ROBOT Indexer Engine",
+    "capabilities": [
+      "run all",
+      "generate skills map",
+      "parse skill file",
+      "collect all skills",
+      "generate codebase maps"
+    ],
+    "contracts": {
+      "preconditions": [],
+      "positive_invariants": [
+        "index_engine",
+        "run",
+        "generate",
+        "parse",
+        "collect",
+        "generate"
+      ],
+      "negative_constraints": []
+    },
+    "dependencies": [],
+    "symbol_anchors": [
+      {
+        "file_path": "tools/indexer/index_engine.py",
+        "symbol_name": "parse_skill_file",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/index_engine.py",
+        "symbol_name": "collect_all_skills",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/index_engine.py",
+        "symbol_name": "generate_skills_map",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/index_engine.py",
+        "symbol_name": "generate_codebase_maps",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/index_engine.py",
+        "symbol_name": "run_all",
+        "symbol_kind": "Function"
+      }
+    ]
+  },
+  {
+    "node_id": "q_index",
+    "module_path": "tools/indexer/q_index.py",
+    "semantic_summary": "Gen-2 Adaptive Cognitive Navigation & Diagnostic Probing Engine",
+    "capabilities": [
+      "load capabilities",
+      "evaluate conformal gate",
+      "load probes",
+      "calculate shannon entropy",
+      "record navigation telemetry",
+      "route gen2",
+      "main",
+      "find best diagnostic probe"
+    ],
+    "contracts": {
+      "preconditions": [],
+      "positive_invariants": [
+        "q_index",
+        "load",
+        "evaluate",
+        "load",
+        "calculate",
+        "record"
+      ],
+      "negative_constraints": []
+    },
+    "dependencies": [],
+    "symbol_anchors": [
+      {
+        "file_path": "tools/indexer/q_index.py",
+        "symbol_name": "load_capabilities",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/q_index.py",
+        "symbol_name": "load_probes",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/q_index.py",
+        "symbol_name": "calculate_shannon_entropy",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/q_index.py",
+        "symbol_name": "evaluate_conformal_gate",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/q_index.py",
+        "symbol_name": "find_best_diagnostic_probe",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/q_index.py",
+        "symbol_name": "route_gen2",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/q_index.py",
+        "symbol_name": "record_navigation_telemetry",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/q_index.py",
+        "symbol_name": "main",
+        "symbol_kind": "Function"
+      }
+    ]
+  },
+  {
+    "node_id": "user_pref",
+    "module_path": "tools/indexer/user_pref.py",
+    "semantic_summary": "User Preferences & Memory CLI",
+    "capabilities": [
+      "load json file",
+      "get effective preferences",
+      "cmd set",
+      "set nested key",
+      "save json file",
+      "main",
+      "get nested key",
+      "deep merge"
+    ],
+    "contracts": {
+      "preconditions": [],
+      "positive_invariants": [
+        "user_pref",
+        "load",
+        "get",
+        "cmd",
+        "set",
+        "save"
+      ],
+      "negative_constraints": []
+    },
+    "dependencies": [],
+    "symbol_anchors": [
+      {
+        "file_path": "tools/indexer/user_pref.py",
+        "symbol_name": "deep_merge",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/user_pref.py",
+        "symbol_name": "load_json_file",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/user_pref.py",
+        "symbol_name": "save_json_file",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/user_pref.py",
+        "symbol_name": "get_nested_key",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/user_pref.py",
+        "symbol_name": "set_nested_key",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/user_pref.py",
+        "symbol_name": "parse_value",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/user_pref.py",
+        "symbol_name": "get_effective_preferences",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/user_pref.py",
+        "symbol_name": "cmd_get",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/user_pref.py",
+        "symbol_name": "cmd_set",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/user_pref.py",
+        "symbol_name": "cmd_info",
+        "symbol_kind": "Function"
+      }
+    ]
+  }
+]

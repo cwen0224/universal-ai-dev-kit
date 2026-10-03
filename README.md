@@ -10,13 +10,16 @@
 export_package/
 ├── UNIVERSAL_AI_DEVELOPMENT_GUIDELINES.md   # 核心開發與工程準則 (可更名為 AGENTS.md / RULES.md)
 ├── docs/
-│   └── README.md                            # 同上規範文件副本，方便放在文檔庫
+│   ├── README.md                            # 同上規範文件副本，方便放在文檔庫
+│   └── schemas/gen2_navigation_schemas.json # 第二代自適應認知導航標準契約 Schema
 └── tools/                                   # 核心索引與漸進式代碼定位工具鏈 (純標準庫，無外部依賴)
     ├── clis/
     │   ├── clis_engine.py                   # AST 語法樹符號提取、骨架檢視與精準切片讀取器
+    │   ├── call_graph.py                    # AST 雙向呼叫鏈與因果切片追蹤器 (Callers / Callees)
     │   └── merkle_tree.py                   # Merkle Tree SHA-256 秒級增量變更感知器
     └── indexer/
-        ├── q_index.py                       # Akinator 式資訊增益選題與模糊意圖導航引擎
+        ├── q_index.py                       # Gen-2 自適應認知導航引擎 (共形預測閘門 + 診斷探針)
+        ├── capability_compiler.py           # 離線能力契約編譯器 (自動萃取 AST 錨點與合約圖譜)
         ├── find_code.py                     # 高效代碼快速搜尋 CLI (支援 FILE_INDEX 快取免遍歷)
         ├── find_skill.py                    # 技能/指南多層漸進式檢索 CLI (Catalog/Describe)
         ├── index_engine.py                  # 全系統索引與 CODEBASE_MAP 自動生成引擎
@@ -83,7 +86,33 @@ export_package/
   python tools/indexer/user_pref.py set --scope global general.language "zh-TW"
   ```
 
-### 6. `tools/indexer/q_index.py` (Gen-2 自適應認知導航與診斷探針引擎)
+### 6. `tools/clis/call_graph.py` (AST 雙向呼叫鏈與因果切片)
+為 CLIS 系統提供雙向追蹤，秒級鎖定呼叫來源（Callers）與下游依賴（Callees），避免重啟全域搜尋：
+- **反向切片（誰呼叫了這個函式？）**：
+  ```bash
+  python tools/clis/call_graph.py callers <函式名>
+  ```
+- **前向切片（這個函式呼叫了誰？）**：
+  ```bash
+  python tools/clis/call_graph.py callees <檔案路徑> <函式名>
+  ```
+- **重建呼叫圖索引快取**：
+  ```bash
+  python tools/clis/call_graph.py reindex
+  ```
+
+### 7. `tools/indexer/capability_compiler.py` (離線能力契約編譯器)
+自動掃描專案程式庫、docstrings 與符號，編譯出符合 Gen-2 契約規範的能力圖譜（`capability_graph.json`）：
+- **全自動編譯能力圖**：
+  ```bash
+  python tools/indexer/capability_compiler.py compile
+  ```
+- **合規性靜態檢查**：
+  ```bash
+  python tools/indexer/capability_compiler.py check
+  ```
+
+### 8. `tools/indexer/q_index.py` (Gen-2 自適應認知導航與診斷探針引擎)
 整合資訊論熵減、共形預測置信區間與預編譯探針庫，全面杜絕線上純動態問答的推論延遲與語意漂移：
 - **快慢雙軌導航 (Conformal Gating)**：
   - 候選數 $\le 2$ 時觸發 `FAST_TRACK` 直接穿透至 CLIS 代碼鏡頭。
@@ -96,6 +125,7 @@ export_package/
   ```bash
   python tools/indexer/q_index.py feedback --query "字幕時間不對" --selected "caption_titlecards" --success true
   ```
+
 
 
 
