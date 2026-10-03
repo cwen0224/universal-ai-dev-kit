@@ -16,7 +16,8 @@ export_package/
     │   ├── clis_engine.py                   # AST 語法樹符號提取、骨架檢視與精準切片讀取器
     │   └── merkle_tree.py                   # Merkle Tree SHA-256 秒級增量變更感知器
     └── indexer/
-        ├── find_code.py                     # 高效代碼與模組快速搜尋 CLI
+        ├── q_index.py                       # Akinator 式資訊增益選題與模糊意圖導航引擎
+        ├── find_code.py                     # 高效代碼快速搜尋 CLI (支援 FILE_INDEX 快取免遍歷)
         ├── find_skill.py                    # 技能/指南多層漸進式檢索 CLI (Catalog/Describe)
         ├── index_engine.py                  # 全系統索引與 CODEBASE_MAP 自動生成引擎
         └── user_pref.py                     # 使用者偏好日誌與記憶管理 CLI (全域與專案雙層作用域)
@@ -81,6 +82,19 @@ export_package/
   ```bash
   python tools/indexer/user_pref.py set --scope global general.language "zh-TW"
   ```
+
+### 6. `tools/indexer/q_index.py` (Q-Index 智能意圖導航引擎)
+Akinator 式資訊增益二分導航：當 AI 不確定任務歸屬時，以最高資訊量問題迅速二分收斂候選空間：
+- **意圖與狀態導航**：
+  ```bash
+  python tools/indexer/q_index.py route --intent "字幕"
+  python tools/indexer/q_index.py route --state "rendered_video" --problem "timing_misalignment"
+  ```
+- **記錄檢索遙測與回饋**（自我進化）：
+  ```bash
+  python tools/indexer/q_index.py feedback --query "字幕時間不對" --selected "3_Caption" --success true
+  ```
+
 
 
 ---
