@@ -44,7 +44,8 @@
 6. [🎨 耗時任務與視覺高效率迭代規範 (Fast Iteration & Single-Snapshot Protocol)](#6-耗時任務與視覺高效率迭代規範-fast-iteration--single-snapshot-protocol)
 7. [🌐 跨平台環境相容與字元編碼鐵律 (Cross-Platform & Encoding Rules)](#7-跨平台環境相容與字元編碼鐵律-cross-platform--encoding-rules)
 8. [🔒 系統狀態持久化、安全審批與 CI/CD 規範 (Persistence, Security & CI/CD)](#8-系統狀態持久化安全審批與-cicd-規範-persistence-security--cicd)
-9. [📋 跨專案落地檢查清單 (Universal Adoption Checklist)](#9-跨專案落地檢查清單-universal-adoption-checklist)
+9. [🧠 使用者偏好日誌與記憶治理規範 (User Preference & Memory System)](#9-使用者偏好日誌與記憶治理規範-user-preference--memory-system)
+10. [📋 跨專案落地檢查清單 (Universal Adoption Checklist)](#10-跨專案落地檢查清單-universal-adoption-checklist)
 
 
 ---
@@ -319,7 +320,57 @@
 
 ---
 
-## 9. 跨專案落地檢查清單 (Universal Adoption Checklist)
+## 9. 使用者偏好日誌與記憶治理規範 (User Preference & Memory System)
+
+> **核心精神：將用戶習慣與專案慣例結構化持久化，減少重複 Prompt 說明並確保跨任務行為一致性。**
+
+### 9.1 偏好作用域與儲存結構 (Scoped Preference Storage)
+- **全域偏好 (Global Scope)**：
+  - **位置**：`~/.config/ai_toolkit/user_preferences.json`
+  - **範疇**：跨專案之個人習慣（如：預設語系 `zh-TW`、開發者暱稱、預設 Git 提交風格、慣用編輯器）。
+- **專案偏好 (Project Scope)**：
+  - **位置**：專案根目錄 `./.agents/user_preferences.json`
+  - **範疇**：特定專案之領域知識（如：專屬術語表、禁用的函式庫、專案架構規範、特定 CLI 預設參數）。
+
+### 9.2 覆蓋優先順序 (Override Hierarchy)
+CLI 工具與 Agent 於解析參數時，必須嚴格遵守下列確定性優先順序：
+> **`CLI 顯式傳參 (Flags)` > `專案偏好 (Project)` > `全域偏好 (Global)` > `系統內建預設值 (Defaults)`**
+
+### 9.3 偏好資料結構標準 (JSON Schema)
+偏好日誌必須維持極簡結構化 JSON，嚴禁寫入非結構化之漫長對話歷史：
+```json
+{
+  "version": "1.0",
+  "general": {
+    "language": "zh-TW",
+    "output_style": "concise"
+  },
+  "coding_standards": {
+    "indent_spaces": 2,
+    "forbidden_packages": ["lodash", "moment"],
+    "test_framework": "pytest"
+  },
+  "git_preferences": {
+    "commit_prefix_emoji": false,
+    "auto_stage_untracked": false
+  },
+  "domain_glossary": {
+    "A-Roll": "主講人虛擬主播片段",
+    "B-Roll": "補充空鏡與畫面素材"
+  }
+}
+```
+
+### 9.4 偏好擷取與記憶更新機制 (Memory Read/Write Protocol)
+- **動態切片注入 (Scoped Context Injection)**：
+  - CLI 工具於提供選單或工具說明時，僅注入與該任務相符之偏好節點（如跑程式碼搜尋只提取 `coding_standards`），嚴禁全量載入全檔以節省 Token。
+- **主動持久化觸發 (Implicit Memory Learning)**：
+  - 當使用者下達帶有長期約束力的修正指令（如：「以後這個專案的縮排一律用 2 個空格」）時，Agent **必須主動調用偏好管理 CLI**（`tools/indexer/user_pref.py set coding_standards.indent_spaces 2`）將其寫入 `./.agents/user_preferences.json`，並向使用者確認已記錄記憶。
+- **敏感隱私邊界**：偏好日誌嚴禁記錄密碼、API Key、Token 或敏感個人隱私資訊；專案偏好檔若含個人路徑，應避免版控污染。
+
+---
+
+## 10. 跨專案落地檢查清單 (Universal Adoption Checklist)
 
 在新專案導入 AI 代理人或編寫 Agent Rules 時，請依下列檢查項配置：
 
@@ -335,5 +386,7 @@
 - [ ] **狀態持久化**：多步驟長任務是否實作快照持久化與冪等跳過機制？
 - [ ] **安全審批**：破壞性指令（如遞迴刪除、硬重置）是否配置 Human-in-the-Loop 審批門檻？
 - [ ] **提示詞與日誌安全**：非信任外部輸入是否隔離為資料？日誌是否遮蔽金鑰與隱私資料？
+- [ ] **偏好日誌與記憶**：是否配置全域/專案雙層偏好，並於強修正時主動提煉持久化至 `.agents/`？
 - [ ] **CI/CD 地圖同步**：是否透過 Git Hook 或 CI 自動維護專案索引地圖？
+
 

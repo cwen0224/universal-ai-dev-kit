@@ -18,7 +18,8 @@ export_package/
     └── indexer/
         ├── find_code.py                     # 高效代碼與模組快速搜尋 CLI
         ├── find_skill.py                    # 技能/指南多層漸進式檢索 CLI (Catalog/Describe)
-        └── index_engine.py                  # 全系統索引與 CODEBASE_MAP 自動生成引擎
+        ├── index_engine.py                  # 全系統索引與 CODEBASE_MAP 自動生成引擎
+        └── user_pref.py                     # 使用者偏好日誌與記憶管理 CLI (全域與專案雙層作用域)
 ```
 
 ---
@@ -63,6 +64,24 @@ export_package/
   ```bash
   python tools/indexer/find_skill.py <關鍵字> --describe
   ```
+
+### 5. `tools/indexer/user_pref.py` (使用者偏好日誌與記憶管理)
+管理全域（`~/.config/ai_toolkit/`）與專案（`./.agents/`）雙層偏好，實現確定性優先級覆蓋：
+- **查詢有效偏好或特定節點**：
+  ```bash
+  python tools/indexer/user_pref.py get
+  python tools/indexer/user_pref.py get coding_standards.indent_spaces
+  ```
+- **寫入專案偏好記憶**（預設 scope 為 project）：
+  ```bash
+  python tools/indexer/user_pref.py set coding_standards.indent_spaces 2
+  python tools/indexer/user_pref.py set domain_glossary.A-Roll "主講人虛擬主播片段"
+  ```
+- **寫入全域偏好**：
+  ```bash
+  python tools/indexer/user_pref.py set --scope global general.language "zh-TW"
+  ```
+
 
 ---
 
