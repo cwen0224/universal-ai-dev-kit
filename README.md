@@ -83,17 +83,20 @@ export_package/
   python tools/indexer/user_pref.py set --scope global general.language "zh-TW"
   ```
 
-### 6. `tools/indexer/q_index.py` (Q-Index 智能意圖導航引擎)
-Akinator 式資訊增益二分導航：當 AI 不確定任務歸屬時，以最高資訊量問題迅速二分收斂候選空間：
-- **意圖與狀態導航**：
+### 6. `tools/indexer/q_index.py` (Gen-2 自適應認知導航與診斷探針引擎)
+整合資訊論熵減、共形預測置信區間與預編譯探針庫，全面杜絕線上純動態問答的推論延遲與語意漂移：
+- **快慢雙軌導航 (Conformal Gating)**：
+  - 候選數 $\le 2$ 時觸發 `FAST_TRACK` 直接穿透至 CLIS 代碼鏡頭。
+  - 候選數過多或熵值過高時觸發 `SLOW_TRACK`，指派靜態/動態/離散診斷探針：
   ```bash
   python tools/indexer/q_index.py route --intent "字幕"
-  python tools/indexer/q_index.py route --state "rendered_video" --problem "timing_misalignment"
+  python tools/indexer/q_index.py route --intent "讓影片節奏更有科技感"
   ```
-- **記錄檢索遙測與回饋**（自我進化）：
+- **記錄 Gen-2 導航遙測事件**（離線演化能力圖與探針權重）：
   ```bash
-  python tools/indexer/q_index.py feedback --query "字幕時間不對" --selected "3_Caption" --success true
+  python tools/indexer/q_index.py feedback --query "字幕時間不對" --selected "caption_titlecards" --success true
   ```
+
 
 
 

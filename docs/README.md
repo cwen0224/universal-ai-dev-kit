@@ -59,7 +59,7 @@
 2. [🤖 多代理對抗式治理架構 (Twin GAN / Actor-Critic Governance)](#2-多代理對抗式治理架構-twin-gan--actor-critic-governance)
 3. [🛡️ 防禦性工程實踐與系統守則 (Defensive Engineering Principles)](#3-防禦性工程踐與系統守則-defensive-engineering-principles)
 4. [⚡ 精實 Vibe Coding 與 Token 經濟學 (Lean Vibe Coding)](#4-精實-vibe-coding-與-token-經濟學-lean-vibe-coding)
-5. [🧭 漸進式程式碼檢索與定位準則 (Codebase Navigation & Progressive Disclosure)](#5-漸進式程式碼檢索與定位準則-codebase-navigation--progressive-disclosure)
+5. [🧭 自適應認知導航與階層式能力檢索準則 (Generation-2 Cognitive Navigation)](#5-自適應認知導航與階層式能力檢索準則-generation-2-cognitive-navigation)
 6. [🎨 耗時任務與視覺高效率迭代規範 (Fast Iteration & Single-Snapshot Protocol)](#6-耗時任務與視覺高效率迭代規範-fast-iteration--single-snapshot-protocol)
 7. [🌐 跨平台環境相容與字元編碼鐵律 (Cross-Platform & Encoding Rules)](#7-跨平台環境相容與字元編碼鐵律-cross-platform--encoding-rules)
 8. [🔒 系統狀態持久化、安全審批與 CI/CD 規範 (Persistence, Security & CI/CD)](#8-系統狀態持久化安全審批與-cicd-規範-persistence-security--cicd)
@@ -245,48 +245,76 @@
 
 ---
 
-## 5. 漸進式程式碼檢索與定位準則 (Codebase Navigation & Progressive Disclosure)
+## 5. 自適應認知導航與階層式能力檢索準則 (Generation-2 Cognitive Navigation)
 
-> **核心精神：利用架構索引與漸進式揭露，根絕全專案漫無目的的遞迴搜尋；從「搜尋工具」升級為「智能導航協定」。**
+> **核心精神：以「資訊論熵減剪枝 + 契約化能力圖譜 + 程式碼屬性圖切片」建立封閉迴路；全面抑制純機率性幻覺，以符號約束達成高確定性、最小 Token 的導航收斂。**
 
-在大型專案中，盲目遍歷所有檔案會迅速填滿 Context Window 並引發「中間失憶（Lost-in-the-Middle）」問題。本準則將定位拆分為兩大層次：
-- **CLIS (代碼定位)**：解決「我知道我要找什麼，如何以最小 Token 精確讀取目標符號」。
-- **Q-Index (智能導航)**：解決「我甚至不知道這屬於哪個模組，如何以最高資訊增益逐步收斂候選空間」。
+大型語言模型在複雜 Monorepo 中極易面臨「全域上下文過載、注意力渙散與工具錯選」。本準則將傳統單向搜尋升級為「第二代（Gen-2）自適應認知導航閉環體系」，分為六個解耦層級：
 
-### 5.1 四階代碼定位流程 (Four-tier Code Navigation)
-1. **地圖索引 (Map / Index)**：優先讀取專案維護的架構地圖（如 `CODEBASE_MAP.md` 或模組清單），掌握模組職責劃分。
-2. **符號粗篩 (Symbol Search)**：利用輕量索引（`python tools/clis/clis_engine.py search <name>`）快速定位候選檔案與行號（每項僅 15~30 tokens）。
-3. **骨架檢驗 (Structure / Skeleton)**：先讀取檔案 Outline 與介面型別簽名（`struct` 指令，約 200~400 tokens），剔除冗長實作細節。
-4. **精準擷取 (Scoped Read)**：僅讀取確認需要修改的目標函式或區塊（`read -s <func>`，約 50–100 行），在此範圍內實施 Patch。
+### 5.1 六階自適應導航架構 (Gen-2 Six-Layer Navigation Pipeline)
 
-### 5.2 Q-Index 意圖導航協定 (Akinator-style Question Routing)
-當任務意圖模糊（例如「我要讓畫面更有敘事感」，未知屬於 Music、Caption 或 B-Roll）時，觸發 Q-Index 導航協定：
-- **資訊增益選題 (Information Gain Splitting)**：
-  - 嚴禁人工寫死線性問卷。每個候選能力與模組均附帶語意標籤（`tags`）、輸入型別（`inputs`）、產出物（`outputs`）與動作（`actions`）。
-  - Q-Index 以確定性演算法（如二分熵值最大化）挑選「能最大幅度切開候選集合」之關鍵提問（例如「目標是否主要影響文字與時間軸？」）。
-- **負向索引與排除能力 (Negative Indexing)**：
-  - 項目必須宣告「能做什麼 (positive)」與「絕對不能做什麼 (negative)」。
-  - 導航核心原則：**排除無關模組的能力遠比命中關鍵字更重要**。
-- **維度感知：意圖 + 當前產物狀態 (State-Aware Indexing)**：
-  - 導航輸入不僅包含使用者意圖（Intent），更整合目前專案狀態：
-    > `Intent (意圖)` + `Artifact State (產物狀態: 無/JSON/SRT/Rendered)` + `Failure State (錯誤類型: 錯位/重疊/崩潰)` + `Desired Output (目標)`
-  - 精確鎖定該階段的專屬處理與修復管線。
+```
+[模糊任務輸入] ──> (1. 歧義評估與共形閘門) ──[快速路徑]──> (4. CLIS 符號與程式切片)
+                          │
+                      [慢速路徑]
+                          ▼
+            (2. 貝氏資訊追逐與診斷探針)  ──> 靜態斷言 / 動態測試 / 離散選擇
+                          │
+                          ▼
+            (3. 契約約束能力圖譜與慣性快取) ──> 正負約束過濾 / 馬可夫路徑跳轉
+                          │
+                          ▼
+            (4. 神經符號代碼鏡頭 AST-CPG) ──> 雙向切片 (前向衝擊/反向依賴)
+                          │
+                          ▼
+            (5. 宣告式合約與沙盒執行端)   ──> 確定性編譯器 / 測試驗證
+                          │
+                          ▼
+            (6. 非同步遙測與圖記憶校準)   ──> 記錄熵減路徑，離線演化更新
+```
 
-### 5.3 能力圖與依賴流 (Capability & Dependency Graphs)
-- **能力圖 (Capability Graph)**：超越靜態目錄樹，建立 `CAPABILITY_GRAPH.json`（定義 `capability`, `requires`, `produces`, `related`），支援 Agent 依據「手上已有什麼產物」反查下一步可能路徑。
-- **依賴與呼叫鏈追蹤 (Call & Data-Flow Graph)**：建立函式調用（Call Graph）與資料流（Data-Flow），在定位特定函式後，能秒級獲知其呼叫來源與下游資料去向，避免重啟全域搜尋。
+1. **第一層：歧義評估與共形預測閘門 (Ambiguity & Conformal Gating)**
+   - **快慢雙軌路由**：計算任務特徵並估算候選能力集合 $C_\alpha$。
+   - **快速穿透 (Fast-Track)**：若 $\vert C_\alpha \vert \le 2$ 且置信度高，直接跳過問答，穿透至第 4 層符號切片。
+   - **深度消歧 (Slow-Track)**：若夏農熵 $H(C_\alpha)$ 過高或歧義嚴重，才啟動第 2 層診斷探針。
+   - **主動棄權機制 (Abstention)**：若 $C_\alpha = \emptyset$（無任何模組吻合），系統必須主動宣告無效任務並中斷，嚴禁盲目通靈猜測。
 
-### 5.4 檔案索引庫與增量感知更新 (File Index & Incremental Update)
-- **杜絕全專案即時遞迴掃描**：`find_code.py` 嚴禁在每次呼叫時以 `rglob("*")` 重新遍歷檔案系統。必須優先讀取快取的 `FILE_INDEX.json`（維護檔案路徑、大小、修改時間、hash 與符號清單）。
-- **Merkle Tree 增量維護 (O(changed files))**：透過 Merkle Tree 秒級感知變動檔案，**僅對修改之檔案重新解析 AST、更新符號與重新計算圖節點**，達成增量更新而非整庫重建。
-- **AST / Parser 深度支援**：Python 採原生 `ast`，JS/TS 採專屬語法分析器，精準解析 classes, methods, imports, exports 與調用關係。
+2. **第二層：貝氏資訊追逐與預編譯診斷探針 (Bayesian Diagnostic Probes)**
+   - **杜絕純動態自然語言提問**：每一輪在線上用 LLM 即時生成問卷會產生不可接受的延遲、Token 開銷與語意漂移風險。
+   - **三級預編譯診斷探針**：
+     1. **`STATIC_ASSERTION` (靜態斷言探針，成本近 0)**：檢查設定檔標記、環境變數、產物檔案副檔名或特定目錄存在性。
+     2. **`DYNAMIC_TEST` (動態測試探針，成本低/資訊量極高)**：執行最小單元測試或語法檢查，利用測試覆蓋率矩陣與頻譜故障定位（SBFL / Stack Trace），在數毫秒內排除 99% 的無關代碼。
+     3. **`DISCRETE_CLARIFICATION` (離散選擇探針，保底手段)**：僅當靜態與動態探針皆無法區分時，才向開發者丟出具備最大資訊增益（$\arg\max I(\text{Candidate}; \text{Probe})$）的 2 選 1 或 3 選 1 離散選擇題。
 
-### 5.5 檢索品質記憶與自動調優 (Retrieval Telemetry)
-- 每次搜尋與導航均記錄微型遙測資料（Query、路由路徑、選定檔案、成功/失敗狀態與真實目標修正）。
-- 累積失敗路徑自動提煉為 Q-Index 的混淆排除條件與負向標籤，讓索引系統具備自我修復與演化能力。
+3. **第三層：契約約束能力圖譜與慣性快取 (Capability Graph & Inertia Cache)**
+   - **正負約束過濾 (Positive/Negative Constraints)**：超越關鍵字匹配。每個能力節點嚴格維護「前置條件（Preconditions）」、「能做什麼（Positive Invariants）」與「絕對不能做什麼（Negative Constraints）」。命中負向條件者一票否決。
+   - **工具使用慣性快取 (Markov Tool Inertia)**：借鑑 AutoTool 原則，高達 60% 的工程任務具有高度固定的依賴路徑（例如：修改 Caption 模組後通常接續 Editor）。記錄轉移機率矩陣，高置信度時直接進行微秒級確定性圖跳轉，繞過 LLM 推論。
 
-### 5.6 搜尋排除規範
+4. **第四層：神經符號代碼鏡頭與雙向切片 (AST & Bi-directional Program Slicing)**
+   - **四階漸進式代碼定位 (CLIS)**：
+     - `search`：符號粗篩，僅返回簽名與行號（15~30 tokens/項）。
+     - `struct`：骨架檢驗，剔除實作提取類別與方法簽名（200~400 tokens）。
+     - `read -s`：精準切片，僅讀取目標函式區塊（50~100 行）。
+   - **雙向程式切片 (Program Slicing)**：
+     - **反向切片 (Backward Slicing)**：追溯函式輸入參數的全域依賴來源與呼叫鏈。
+     - **前向切片 (Forward Slicing)**：評估修改目標函式後對下游回傳值的連鎖影響。
+     - 組合為具備完整因果因子的「最小語意閉包 (Minimal Context)」，杜絕無關代碼干擾。
+
+5. **第五層：宣告式合成與確定性沙盒執行 (Declarative Sandbox Execution)**
+   - AI 的唯一職責是輸出宣告式合約（JSON/YAML），嚴禁直接以破碎 Shell 指令操作系統。
+   - 由隔離沙盒內的確定性工具（編譯器、Linter、測試執行器）執行。執行失敗時將堆疊資訊（Stack Trace）回灌為診斷訊號，啟動局部重修。
+
+6. **第六層：非同步遙測與平攤圖記憶校準 (Asynchronous Telemetry & Consolidation)**
+   - 每次導航均非同步寫入結構化遙測事件（`NavigationTelemetryEvent`），記錄初始候選集大小、每步熵減路徑、目標符號與最終成功/失敗狀態。
+   - 由離線 Index Curator 定期挖掘歷史失敗軌跡，動態修補能力契約的正負約束、校準慣性圖權重，讓系統自我演化。
+
+### 5.2 檔案快取索引與增量維護 (File Index & Incremental Update)
+- **快取索引免遍歷**：`find_code.py` 嚴禁呼叫即時 `rglob("*")`，必須優先查閱 `.cache/file_index.json`（維護檔案路徑、大小、修改時間與 hash）。
+- **Merkle Tree 增量維護**：透過 SHA-256 樹秒級比對變動檔案，僅對變更檔案進行 AST 重新解析與圖節點重整，達到 $O(\text{changed files})$ 的高效能。
+
+### 5.3 搜尋與導航排除規範
 - 全域搜尋與索引時強制排除：依賴目錄（`node_modules/`, `site-packages/`, `.venv/`）、快取與建置輸出（`dist/`, `build/`, `.cache/`）、暫存檔案與大型媒體資料。
+
 
 
 ---
@@ -434,10 +462,13 @@ CLI 工具與 Agent 於解析參數時，必須嚴格遵守下列確定性優先
 - [ ] **狀態持久化**：多步驟長任務是否實作快照持久化與冪等跳過機制？
 - [ ] **安全審批**：破壞性指令（如遞迴刪除、硬重置）是否配置 Human-in-the-Loop 審批門檻？
 - [ ] **提示詞與日誌安全**：非信任外部輸入是否隔離為資料？日誌是否遮蔽金鑰與隱私資料？
-- [ ] **Q-Index 導航與能力圖**：模糊任務是否支援資訊增益選題與負向排除？是否有宣告產物前置與後置能力圖？
+- [ ] **Gen-2 自適應導航**：是否支援共形置信閘門（快慢雙軌）、預編譯三級診斷探針（靜態/動態/離散），杜絕線上純動態提問？
+- [ ] **能力契約與慣性快取**：是否維護正負約束（Positive/Negative Constraints）與馬可夫高頻轉移路徑？
+- [ ] **雙向程式切片**：CLIS 是否支援前向衝擊與反向依賴切片，僅提取最小因果閉包？
 - [ ] **快取索引與增量維護**：`find_code` 是否使用 `FILE_INDEX.json` 避免重覆全域掃描？是否由 Merkle Tree 進行 O(changed files) 增量更新？
 - [ ] **偏好日誌與記憶**：是否配置全域/專案雙層偏好，並於強修正時主動提煉持久化至 `.agents/`？
 - [ ] **CI/CD 地圖同步**：是否透過 Git Hook 或 CI 自動維護專案索引地圖？
+
 
 
 

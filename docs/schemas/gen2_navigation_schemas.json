@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gen2NavigationSchemas",
+  "description": "第二代自適應認知導航三大核心資料契約標準 (Capability Contract, Diagnostic Probe, Navigation Telemetry)",
+  "definitions": {
+    "CapabilityNodeContract": {
+      "type": "object",
+      "properties": {
+        "node_id": { "type": "string" },
+        "module_path": { "type": "string" },
+        "semantic_summary": { "type": "string" },
+        "capabilities": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "contracts": {
+          "type": "object",
+          "properties": {
+            "preconditions": { "type": "array", "items": { "type": "string" } },
+            "positive_invariants": { "type": "array", "items": { "type": "string" } },
+            "negative_constraints": { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["positive_invariants", "negative_constraints"]
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "target_node_id": { "type": "string" },
+              "relation_type": { "enum": ["CALLS", "IMPORTS", "INHERITS", "DATA_FLOW"] }
+            },
+            "required": ["target_node_id", "relation_type"]
+          }
+        },
+        "symbol_anchors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "file_path": { "type": "string" },
+              "symbol_name": { "type": "string" },
+              "symbol_kind": { "enum": ["Class", "Method", "Interface", "Function"] }
+            },
+            "required": ["file_path", "symbol_name", "symbol_kind"]
+          }
+        }
+      },
+      "required": ["node_id", "module_path", "capabilities", "contracts", "symbol_anchors"]
+    },
+    "DiagnosticProbeSpecification": {
+      "type": "object",
+      "properties": {
+        "probe_id": { "type": "string" },
+        "target_ambiguity_class": { "type": "string" },
+        "probe_type": { "enum": ["STATIC_ASSERTION", "DYNAMIC_TEST", "DISCRETE_CLARIFICATION"] },
+        "execution_payload": { "type": "string" },
+        "discriminant_outcomes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "outcome_identifier": { "type": "string" },
+              "pruned_node_ids": { "type": "array", "items": { "type": "string" } },
+              "posterior_belief_weight": { "type": "number" }
+            },
+            "required": ["outcome_identifier", "pruned_node_ids"]
+          }
+        },
+        "computational_cost": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      },
+      "required": ["probe_id", "probe_type", "execution_payload", "discriminant_outcomes", "computational_cost"]
+    },
+    "NavigationTelemetryEvent": {
+      "type": "object",
+      "properties": {
+        "trace_id": { "type": "string" },
+        "task_fingerprint": { "type": "string" },
+        "initial_conformal_set_size": { "type": "integer" },
+        "entropy_reduction_path": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": { "type": "integer" },
+              "probe_id": { "type": "string" },
+              "entropy_before": { "type": "number" },
+              "entropy_after": { "type": "number" }
+            },
+            "required": ["step", "probe_id", "entropy_before", "entropy_after"]
+          }
+        },
+        "traversed_capability_nodes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "target_symbol_matched": { "type": "string" },
+        "execution_verdict": { "enum": ["SUCCESS", "SYNTAX_ERROR", "ORACLE_FAILURE", "ABORT"] },
+        "total_token_overhead": { "type": "integer" },
+        "total_latency_ms": { "type": "integer" }
+      },
+      "required": [
+        "trace_id",
+        "task_fingerprint",
+        "initial_conformal_set_size",
+        "traversed_capability_nodes",
+        "execution_verdict",
+        "total_latency_ms"
+      ]
+    }
+  }
+}
