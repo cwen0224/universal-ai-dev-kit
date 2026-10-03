@@ -1,22 +1,60 @@
 [
   {
+    "node_id": "agent_nav",
+    "module_path": "tools/agent_nav.py",
+    "semantic_summary": "Agent Unified Navigation Portal (agent_nav)",
+    "capabilities": [
+      "run script",
+      "cmd reindex",
+      "main"
+    ],
+    "contracts": {
+      "preconditions": [],
+      "positive_invariants": [
+        "agent_nav",
+        "run",
+        "cmd",
+        "main"
+      ],
+      "negative_constraints": []
+    },
+    "dependencies": [],
+    "symbol_anchors": [
+      {
+        "file_path": "tools/agent_nav.py",
+        "symbol_name": "run_script",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/agent_nav.py",
+        "symbol_name": "cmd_reindex",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/agent_nav.py",
+        "symbol_name": "main",
+        "symbol_kind": "Function"
+      }
+    ]
+  },
+  {
     "node_id": "call_graph",
     "module_path": "tools/clis/call_graph.py",
     "semantic_summary": "AST Call Graph & Program Slicing Tool",
     "capabilities": [
+      "cmd trace",
       "build call graph",
-      "callgraphvisitor",
-      "cmd callers",
       "cmd callees",
+      "cmd callers",
       "main",
-      "cmd trace"
+      "callgraphvisitor"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "call_graph",
+        "cmd",
         "build",
-        "callgraphvisitor",
         "cmd",
         "cmd",
         "main"
@@ -62,24 +100,24 @@
     "module_path": "tools/clis/clis_engine.py",
     "semantic_summary": "ROBOT AST & Code Location Indexing System (CLIS)",
     "capabilities": [
-      "read symbol source",
-      "get symbol structure",
       "get symbols",
-      "parse python symbols",
       "search symbols",
       "main",
+      "get symbol structure",
+      "parse python symbols",
       "build symbol index",
-      "parse js symbols"
+      "parse js symbols",
+      "read symbol source"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "clis_engine",
-        "read",
         "get",
+        "search",
+        "main",
         "get",
-        "parse",
-        "search"
+        "parse"
       ],
       "negative_constraints": []
     },
@@ -132,21 +170,21 @@
     "module_path": "tools/clis/merkle_tree.py",
     "semantic_summary": "ROBOT Merkle Tree & Incremental Change Detector",
     "capabilities": [
+      "sync merkle",
       "build tree",
       "main",
-      "hash file",
-      "sync merkle",
-      "get changed files"
+      "get changed files",
+      "hash file"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "merkle_tree",
+        "sync",
         "build",
         "main",
-        "hash",
-        "sync",
-        "get"
+        "get",
+        "hash"
       ],
       "negative_constraints": []
     },
@@ -180,21 +218,45 @@
     ]
   },
   {
+    "node_id": "install_hooks",
+    "module_path": "tools/hooks/install_hooks.py",
+    "semantic_summary": "Git Pre-Commit Hook Installer",
+    "capabilities": [
+      "install hook"
+    ],
+    "contracts": {
+      "preconditions": [],
+      "positive_invariants": [
+        "install_hooks",
+        "install"
+      ],
+      "negative_constraints": []
+    },
+    "dependencies": [],
+    "symbol_anchors": [
+      {
+        "file_path": "tools/hooks/install_hooks.py",
+        "symbol_name": "install_hook",
+        "symbol_kind": "Function"
+      }
+    ]
+  },
+  {
     "node_id": "capability_compiler",
     "module_path": "tools/indexer/capability_compiler.py",
     "semantic_summary": "Capability Compiler & Contract Generator",
     "capabilities": [
-      "compile capability graph",
       "main",
-      "extract python module capabilities"
+      "extract python module capabilities",
+      "compile capability graph"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "capability_compiler",
-        "compile",
         "main",
-        "extract"
+        "extract",
+        "compile"
       ],
       "negative_constraints": []
     },
@@ -222,18 +284,18 @@
     "module_path": "tools/indexer/find_code.py",
     "semantic_summary": "ROBOT Code Finder CLI (with FILE_INDEX Cache)",
     "capabilities": [
+      "build file index",
       "main",
       "search code",
-      "build file index",
       "load file index"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "find_code",
+        "build",
         "main",
         "search",
-        "build",
         "load"
       ],
       "negative_constraints": []
@@ -267,15 +329,15 @@
     "module_path": "tools/indexer/find_skill.py",
     "semantic_summary": "ROBOT Skill Finder CLI",
     "capabilities": [
-      "search skills",
-      "main"
+      "main",
+      "search skills"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "find_skill",
-        "search",
-        "main"
+        "main",
+        "search"
       ],
       "negative_constraints": []
     },
@@ -298,21 +360,21 @@
     "module_path": "tools/indexer/index_engine.py",
     "semantic_summary": "ROBOT Indexer Engine",
     "capabilities": [
-      "run all",
       "generate skills map",
       "parse skill file",
+      "generate codebase maps",
       "collect all skills",
-      "generate codebase maps"
+      "run all"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "index_engine",
-        "run",
         "generate",
         "parse",
+        "generate",
         "collect",
-        "generate"
+        "run"
       ],
       "negative_constraints": []
     },
@@ -350,24 +412,24 @@
     "module_path": "tools/indexer/q_index.py",
     "semantic_summary": "Gen-2 Adaptive Cognitive Navigation & Diagnostic Probing Engine",
     "capabilities": [
+      "route gen2",
+      "record navigation telemetry",
+      "main",
+      "load probes",
       "load capabilities",
       "evaluate conformal gate",
-      "load probes",
-      "calculate shannon entropy",
-      "record navigation telemetry",
-      "route gen2",
-      "main",
-      "find best diagnostic probe"
+      "find best diagnostic probe",
+      "calculate shannon entropy"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "q_index",
+        "route",
+        "record",
+        "main",
         "load",
-        "evaluate",
-        "load",
-        "calculate",
-        "record"
+        "load"
       ],
       "negative_constraints": []
     },
@@ -420,12 +482,12 @@
     "module_path": "tools/indexer/user_pref.py",
     "semantic_summary": "User Preferences & Memory CLI",
     "capabilities": [
-      "load json file",
-      "get effective preferences",
-      "cmd set",
-      "set nested key",
-      "save json file",
+      "cmd info",
+      "parse value",
       "main",
+      "save json file",
+      "get effective preferences",
+      "set nested key",
       "get nested key",
       "deep merge"
     ],
@@ -433,11 +495,11 @@
       "preconditions": [],
       "positive_invariants": [
         "user_pref",
-        "load",
-        "get",
         "cmd",
-        "set",
-        "save"
+        "parse",
+        "main",
+        "save",
+        "get"
       ],
       "negative_constraints": []
     },

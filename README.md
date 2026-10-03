@@ -11,12 +11,16 @@ export_package/
 ├── UNIVERSAL_AI_DEVELOPMENT_GUIDELINES.md   # 核心開發與工程準則 (可更名為 AGENTS.md / RULES.md)
 ├── docs/
 │   ├── README.md                            # 同上規範文件副本，方便放在文檔庫
-│   └── schemas/gen2_navigation_schemas.json # 第二代自適應認知導航標準契約 Schema
+│   ├── schemas/gen2_navigation_schemas.json # 第二代自適應認知導航標準契約 Schema
+│   └── templates/AGENTS.template.md         # 專為外掛 AI 代理人設計之極簡行動規範樣板
 └── tools/                                   # 核心索引與漸進式代碼定位工具鏈 (純標準庫，無外部依賴)
+    ├── agent_nav.py                         # 🌟 代理人統一導航入口 (Unified Single Entrypoint CLI)
     ├── clis/
     │   ├── clis_engine.py                   # AST 語法樹符號提取、骨架檢視與精準切片讀取器
     │   ├── call_graph.py                    # AST 雙向呼叫鏈與因果切片追蹤器 (Callers / Callees)
     │   └── merkle_tree.py                   # Merkle Tree SHA-256 秒級增量變更感知器
+    ├── hooks/
+    │   └── install_hooks.py                 # Git Pre-commit Hook 一鍵安裝腳本 (防止中繼資料腐化)
     └── indexer/
         ├── q_index.py                       # Gen-2 自適應認知導航引擎 (共形預測閘門 + 診斷探針)
         ├── capability_compiler.py           # 離線能力契約編譯器 (自動萃取 AST 錨點與合約圖譜)
@@ -28,7 +32,34 @@ export_package/
 
 ---
 
-## 🛠️ 工具鏈使用指引 (How to Use Tools)
+## 🌟 統一導航入口：`tools/agent_nav.py`
+
+為了避免 AI 或人類記誦多個工具腳本，專案提供單一聚合入口 `agent_nav.py`：
+
+```bash
+# 1. 意圖導航 (模糊任務收斂)
+python tools/agent_nav.py route "字幕時間對不上"
+
+# 2. 符號與切片定位
+python tools/agent_nav.py symbol <函式名>
+python tools/agent_nav.py struct <檔案路徑>
+python tools/agent_nav.py read <檔案路徑> -s <函式名>
+
+# 3. 雙向呼叫鏈與因果分析
+python tools/agent_nav.py callers <函式名>
+python tools/agent_nav.py callees <檔案路徑> <函式名>
+
+# 4. 檔案定位與偏好設定
+python tools/agent_nav.py file <檔名關鍵字>
+python tools/agent_nav.py pref get
+
+# 5. 一鍵全系統增量重建索引
+python tools/agent_nav.py reindex
+```
+
+---
+
+## 🛠️ 各工具鏈獨立使用指引 (Independent Tools)
 
 所有工具均基於 Python 標準庫（AST, Hashlib, Pathlib, Argparse），在任何新專案中**不需要安裝額外的 pip 套件**即可直接運行。
 
@@ -47,46 +78,7 @@ export_package/
   python tools/clis/clis_engine.py read <檔案路徑> -s <函式名>
   ```
 
-### 2. `tools/clis/merkle_tree.py` (秒級變更感知)
-- 快速建立目錄樹的 SHA-256 雜湊，秒級比對出被修改的檔案清單：
-  ```bash
-  python tools/clis/merkle_tree.py --diff
-  ```
-
-### 3. `tools/indexer/find_code.py` (檔案快速定位)
-- 支援檔名、特定模組或副檔名快速過濾：
-  ```bash
-  python tools/indexer/find_code.py <關鍵字> -e py
-  ```
-
-### 4. `tools/indexer/find_skill.py` (技能與指南漸進披露)
-- **目錄層極簡摘要**（Catalog，15~30 tokens/項）：
-  ```bash
-  python tools/indexer/find_skill.py --catalog
-  ```
-- **描述層含負向防誤觸條件**（Describe，50~120 tokens/項）：
-  ```bash
-  python tools/indexer/find_skill.py <關鍵字> --describe
-  ```
-
-### 5. `tools/indexer/user_pref.py` (使用者偏好日誌與記憶管理)
-管理全域（`~/.config/ai_toolkit/`）與專案（`./.agents/`）雙層偏好，實現確定性優先級覆蓋：
-- **查詢有效偏好或特定節點**：
-  ```bash
-  python tools/indexer/user_pref.py get
-  python tools/indexer/user_pref.py get coding_standards.indent_spaces
-  ```
-- **寫入專案偏好記憶**（預設 scope 為 project）：
-  ```bash
-  python tools/indexer/user_pref.py set coding_standards.indent_spaces 2
-  python tools/indexer/user_pref.py set domain_glossary.A-Roll "主講人虛擬主播片段"
-  ```
-- **寫入全域偏好**：
-  ```bash
-  python tools/indexer/user_pref.py set --scope global general.language "zh-TW"
-  ```
-
-### 6. `tools/clis/call_graph.py` (AST 雙向呼叫鏈與因果切片)
+### 2. `tools/clis/call_graph.py` (AST 雙向呼叫鏈與因果切片)
 為 CLIS 系統提供雙向追蹤，秒級鎖定呼叫來源（Callers）與下游依賴（Callees），避免重啟全域搜尋：
 - **反向切片（誰呼叫了這個函式？）**：
   ```bash
@@ -96,44 +88,37 @@ export_package/
   ```bash
   python tools/clis/call_graph.py callees <檔案路徑> <函式名>
   ```
-- **重建呼叫圖索引快取**：
+
+### 3. `tools/clis/merkle_tree.py` (秒級變更感知)
+- 快速建立目錄樹的 SHA-256 雜湊，秒級比對出被修改的檔案清單：
   ```bash
-  python tools/clis/call_graph.py reindex
+  python tools/clis/merkle_tree.py --diff
   ```
 
-### 7. `tools/indexer/capability_compiler.py` (離線能力契約編譯器)
+### 4. `tools/indexer/capability_compiler.py` (離線能力契約編譯器)
 自動掃描專案程式庫、docstrings 與符號，編譯出符合 Gen-2 契約規範的能力圖譜（`capability_graph.json`）：
-- **全自動編譯能力圖**：
-  ```bash
-  python tools/indexer/capability_compiler.py compile
-  ```
-- **合規性靜態檢查**：
-  ```bash
-  python tools/indexer/capability_compiler.py check
-  ```
+```bash
+python tools/indexer/capability_compiler.py compile
+```
 
-### 8. `tools/indexer/q_index.py` (Gen-2 自適應認知導航與診斷探針引擎)
-整合資訊論熵減、共形預測置信區間與預編譯探針庫，全面杜絕線上純動態問答的推論延遲與語意漂移：
-- **快慢雙軌導航 (Conformal Gating)**：
-  - 候選數 $\le 2$ 時觸發 `FAST_TRACK` 直接穿透至 CLIS 代碼鏡頭。
-  - 候選數過多或熵值過高時觸發 `SLOW_TRACK`，指派靜態/動態/離散診斷探針：
-  ```bash
-  python tools/indexer/q_index.py route --intent "字幕"
-  python tools/indexer/q_index.py route --intent "讓影片節奏更有科技感"
-  ```
-- **記錄 Gen-2 導航遙測事件**（離線演化能力圖與探針權重）：
-  ```bash
-  python tools/indexer/q_index.py feedback --query "字幕時間不對" --selected "caption_titlecards" --success true
-  ```
+### 5. `tools/indexer/q_index.py` (Gen-2 自適應認知導航引擎)
+整合資訊論熵減、共形預測置信區間與預編譯探針庫：
+```bash
+python tools/indexer/q_index.py route --intent "字幕"
+```
 
-
-
-
+### 6. `tools/hooks/install_hooks.py` (Git Pre-commit Hook 安裝器)
+一鍵安裝自動化 Pre-commit 鉤子，提交時自動執行 `agent_nav reindex`，杜絕中繼資料腐化：
+```bash
+python tools/hooks/install_hooks.py
+```
 
 ---
 
 ## 🚀 導入新專案步驟
 
 1. 將 `tools/` 資料夾直接複製到新專案根目錄。
-2. 將 `UNIVERSAL_AI_DEVELOPMENT_GUIDELINES.md` 複製至新專案根目錄，可直接命名為 `AGENTS.md`、`RULES.md` 或 `CLAUDE.md` 作為 Agent 的最高行動原則。
-3. （可選）在新專案的根目錄加入 `CODEBASE_MAP.md`，並設定 `tools/indexer/index_engine.py` 的模組對應表以啟用自動索引地圖。
+2. 將 `docs/templates/AGENTS.template.md` 複製至新專案根目錄並命名為 `AGENTS.md`（或 `CLAUDE.md`）。
+3. 執行 `python tools/agent_nav.py reindex` 構建專案初次索引。
+4. （推薦）執行 `python tools/hooks/install_hooks.py` 啟用 Commit 自動同步防護。
+
