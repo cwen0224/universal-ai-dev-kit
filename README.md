@@ -24,6 +24,7 @@ export_package/
     └── indexer/
         ├── q_index.py                       # Gen-2 自適應認知導航引擎 (共形預測閘門 + 診斷探針)
         ├── capability_compiler.py           # 離線能力契約編譯器 (自動萃取 AST 錨點與合約圖譜)
+        ├── skill_code_linker.py             # 🔗 技能員工 (SKILL) ↔ 辦公工具 (CODE) 雙向智慧映射器
         ├── find_code.py                     # 高效代碼快速搜尋 CLI (支援 FILE_INDEX 快取免遍歷)
         ├── find_skill.py                    # 技能/指南多層漸進式檢索 CLI (Catalog/Describe)
         ├── index_engine.py                  # 全系統索引與 CODEBASE_MAP 自動生成引擎
@@ -49,11 +50,15 @@ python tools/agent_nav.py read <檔案路徑> -s <函式名>
 python tools/agent_nav.py callers <函式名>
 python tools/agent_nav.py callees <檔案路徑> <函式名>
 
-# 4. 檔案定位與偏好設定
+# 4. 技能員工 ↔ 辦公工具雙向查詢 (Skill-Code Link)
+python tools/agent_nav.py skill <技能名稱>       # 查看該員工負責管轄的辦公工具與實作代碼
+python tools/agent_nav.py tool <程式檔案路徑>    # 查看修改該程式碼時，必須遵守與參考的職人規範
+
+# 5. 檔案定位與偏好設定
 python tools/agent_nav.py file <檔名關鍵字>
 python tools/agent_nav.py pref get
 
-# 5. 一鍵全系統增量重建索引
+# 6. 一鍵全系統增量重建索引
 python tools/agent_nav.py reindex
 ```
 
@@ -101,13 +106,26 @@ python tools/agent_nav.py reindex
 python tools/indexer/capability_compiler.py compile
 ```
 
-### 5. `tools/indexer/q_index.py` (Gen-2 自適應認知導航引擎)
+### 5. `tools/indexer/skill_code_linker.py` (技能員工 ↔ 辦公工具雙向智慧映射器)
+將專案技能 (SKILL) 視為負責專項工作的員工，代碼 (CODE) 視為其操作的辦公工具，實現雙向追蹤：
+- **職人叫工具（Skill ➔ Code）**：
+  ```bash
+  python tools/indexer/skill_code_linker.py <技能名> -t
+  # 或透過統一入口：python tools/agent_nav.py skill <技能名>
+  ```
+- **工具找職人（Code ➔ Skill）**：
+  ```bash
+  python tools/indexer/skill_code_linker.py <檔案路徑> -s
+  # 或透過統一入口：python tools/agent_nav.py tool <檔案路徑>
+  ```
+
+### 6. `tools/indexer/q_index.py` (Gen-2 自適應認知導航引擎)
 整合資訊論熵減、共形預測置信區間與預編譯探針庫：
 ```bash
 python tools/indexer/q_index.py route --intent "字幕"
 ```
 
-### 6. `tools/hooks/install_hooks.py` (Git Pre-commit Hook 安裝器)
+### 7. `tools/hooks/install_hooks.py` (Git Pre-commit Hook 安裝器)
 一鍵安裝自動化 Pre-commit 鉤子，提交時自動執行 `agent_nav reindex`，杜絕中繼資料腐化：
 ```bash
 python tools/hooks/install_hooks.py

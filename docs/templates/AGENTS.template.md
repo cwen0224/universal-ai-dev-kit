@@ -42,7 +42,16 @@ python tools/agent_nav.py callers <函式名>
 python tools/agent_nav.py callees <檔案相對路徑> <函式名>
 ```
 
-### 4. 檔案快速查詢與偏好記憶
+### 4. 技能規範與辦公工具雙向導航 (Skill ↔ Code)
+```bash
+# 查詢該技能員工依規範調用的核心代碼與工具
+python tools/agent_nav.py skill <技能名稱或角色>
+
+# 查詢修改某程式檔案時，必須遵守與參考的技能指南
+python tools/agent_nav.py tool <程式檔案路徑>
+```
+
+### 5. 檔案快速查詢與偏好記憶
 ```bash
 # 快取檔案定位 (不掃描磁碟，毫秒級返回)
 python tools/agent_nav.py file <檔名關鍵字>
@@ -51,6 +60,7 @@ python tools/agent_nav.py file <檔名關鍵字>
 python tools/agent_nav.py pref get
 ```
 
-### 5. 提交前檢查
+### 6. 提交前檢查
 - 提交前必須執行 `git status` 確保工作目錄乾淨，無免洗測試檔案殘留。
-- 專案已配置 Pre-commit Hook，提交時會自動同步能力圖譜與代碼索引。
+- 專案已配置 Pre-commit Hook，提交時會自動同步能力圖譜、技能對照與代碼索引。
+

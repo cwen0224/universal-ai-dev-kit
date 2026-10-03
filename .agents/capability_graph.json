@@ -42,21 +42,21 @@
     "module_path": "tools/clis/call_graph.py",
     "semantic_summary": "AST Call Graph & Program Slicing Tool",
     "capabilities": [
-      "cmd trace",
-      "build call graph",
-      "cmd callees",
       "cmd callers",
+      "cmd trace",
+      "callgraphvisitor",
+      "build call graph",
       "main",
-      "callgraphvisitor"
+      "cmd callees"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "call_graph",
         "cmd",
+        "cmd",
+        "callgraphvisitor",
         "build",
-        "cmd",
-        "cmd",
         "main"
       ],
       "negative_constraints": []
@@ -100,24 +100,24 @@
     "module_path": "tools/clis/clis_engine.py",
     "semantic_summary": "ROBOT AST & Code Location Indexing System (CLIS)",
     "capabilities": [
-      "get symbols",
-      "search symbols",
-      "main",
-      "get symbol structure",
-      "parse python symbols",
       "build symbol index",
       "parse js symbols",
-      "read symbol source"
+      "read symbol source",
+      "get symbols",
+      "main",
+      "parse python symbols",
+      "get symbol structure",
+      "search symbols"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "clis_engine",
+        "build",
+        "parse",
+        "read",
         "get",
-        "search",
-        "main",
-        "get",
-        "parse"
+        "main"
       ],
       "negative_constraints": []
     },
@@ -170,20 +170,20 @@
     "module_path": "tools/clis/merkle_tree.py",
     "semantic_summary": "ROBOT Merkle Tree & Incremental Change Detector",
     "capabilities": [
-      "sync merkle",
       "build tree",
-      "main",
       "get changed files",
+      "sync merkle",
+      "main",
       "hash file"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "merkle_tree",
-        "sync",
         "build",
-        "main",
         "get",
+        "sync",
+        "main",
         "hash"
       ],
       "negative_constraints": []
@@ -246,17 +246,17 @@
     "module_path": "tools/indexer/capability_compiler.py",
     "semantic_summary": "Capability Compiler & Contract Generator",
     "capabilities": [
-      "main",
+      "compile capability graph",
       "extract python module capabilities",
-      "compile capability graph"
+      "main"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "capability_compiler",
-        "main",
+        "compile",
         "extract",
-        "compile"
+        "main"
       ],
       "negative_constraints": []
     },
@@ -284,19 +284,19 @@
     "module_path": "tools/indexer/find_code.py",
     "semantic_summary": "ROBOT Code Finder CLI (with FILE_INDEX Cache)",
     "capabilities": [
-      "build file index",
-      "main",
       "search code",
-      "load file index"
+      "load file index",
+      "main",
+      "build file index"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "find_code",
-        "build",
-        "main",
         "search",
-        "load"
+        "load",
+        "main",
+        "build"
       ],
       "negative_constraints": []
     },
@@ -329,15 +329,15 @@
     "module_path": "tools/indexer/find_skill.py",
     "semantic_summary": "ROBOT Skill Finder CLI",
     "capabilities": [
-      "main",
-      "search skills"
+      "search skills",
+      "main"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "find_skill",
-        "main",
-        "search"
+        "search",
+        "main"
       ],
       "negative_constraints": []
     },
@@ -360,21 +360,21 @@
     "module_path": "tools/indexer/index_engine.py",
     "semantic_summary": "ROBOT Indexer Engine",
     "capabilities": [
-      "generate skills map",
+      "run all",
       "parse skill file",
-      "generate codebase maps",
       "collect all skills",
-      "run all"
+      "generate codebase maps",
+      "generate skills map"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "index_engine",
-        "generate",
+        "run",
         "parse",
-        "generate",
         "collect",
-        "run"
+        "generate",
+        "generate"
       ],
       "negative_constraints": []
     },
@@ -412,24 +412,24 @@
     "module_path": "tools/indexer/q_index.py",
     "semantic_summary": "Gen-2 Adaptive Cognitive Navigation & Diagnostic Probing Engine",
     "capabilities": [
+      "calculate shannon entropy",
       "route gen2",
-      "record navigation telemetry",
-      "main",
+      "find best diagnostic probe",
       "load probes",
+      "main",
       "load capabilities",
       "evaluate conformal gate",
-      "find best diagnostic probe",
-      "calculate shannon entropy"
+      "record navigation telemetry"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "q_index",
+        "calculate",
         "route",
-        "record",
-        "main",
+        "find",
         "load",
-        "load"
+        "main"
       ],
       "negative_constraints": []
     },
@@ -478,28 +478,73 @@
     ]
   },
   {
+    "node_id": "skill_code_linker",
+    "module_path": "tools/indexer/skill_code_linker.py",
+    "semantic_summary": "Skill-to-Code & Code-to-Skill Linker Tool",
+    "capabilities": [
+      "find tools for skill",
+      "find skills for code",
+      "build skill code map",
+      "main"
+    ],
+    "contracts": {
+      "preconditions": [],
+      "positive_invariants": [
+        "skill_code_linker",
+        "find",
+        "find",
+        "build",
+        "main"
+      ],
+      "negative_constraints": []
+    },
+    "dependencies": [],
+    "symbol_anchors": [
+      {
+        "file_path": "tools/indexer/skill_code_linker.py",
+        "symbol_name": "build_skill_code_map",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/skill_code_linker.py",
+        "symbol_name": "find_tools_for_skill",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/skill_code_linker.py",
+        "symbol_name": "find_skills_for_code",
+        "symbol_kind": "Function"
+      },
+      {
+        "file_path": "tools/indexer/skill_code_linker.py",
+        "symbol_name": "main",
+        "symbol_kind": "Function"
+      }
+    ]
+  },
+  {
     "node_id": "user_pref",
     "module_path": "tools/indexer/user_pref.py",
     "semantic_summary": "User Preferences & Memory CLI",
     "capabilities": [
-      "cmd info",
-      "parse value",
-      "main",
-      "save json file",
       "get effective preferences",
+      "load json file",
       "set nested key",
-      "get nested key",
-      "deep merge"
+      "deep merge",
+      "save json file",
+      "cmd set",
+      "cmd get",
+      "get nested key"
     ],
     "contracts": {
       "preconditions": [],
       "positive_invariants": [
         "user_pref",
-        "cmd",
-        "parse",
-        "main",
-        "save",
-        "get"
+        "get",
+        "load",
+        "set",
+        "deep",
+        "save"
       ],
       "negative_constraints": []
     },

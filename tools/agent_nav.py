@@ -19,14 +19,18 @@ Agent Unified Navigation Portal (agent_nav)
   python tools/agent_nav.py callees <檔案路徑> <函式名>
   python tools/agent_nav.py trace <函式名>
 
-  # 4. 快取檔案查詢 (File Index)
+  # 4. 技能員工 ↔ 辦公工具雙向查詢 (Skill & Tool Link)
+  python tools/agent_nav.py skill <技能名稱>       # 查看員工使用的工具代碼
+  python tools/agent_nav.py tool <程式檔案路徑>    # 查看該代碼受哪些技能規範管轄
+
+  # 5. 快取檔案查詢 (File Index)
   python tools/agent_nav.py file <檔名或模組關鍵字>
 
-  # 5. 偏好設定與記憶管理 (User Preferences)
+  # 6. 偏好設定與記憶管理 (User Preferences)
   python tools/agent_nav.py pref get
   python tools/agent_nav.py pref set <key> <value>
 
-  # 6. 一鍵全系統增量索引構建 (Reindex All)
+  # 7. 一鍵全系統增量索引構建 (Reindex All)
   python tools/agent_nav.py reindex
 """
 
@@ -47,19 +51,23 @@ def cmd_reindex():
     print("🔄 [agent_nav] 開始執行全專案認知導航與索引增量更新...\n")
     
     # 1. 更新檔案快取索引
-    print("1️⃣ [1/4] 構建檔案快取索引 (File Index)...")
+    print("1️⃣ [1/5] 構建檔案快取索引 (File Index)...")
     run_script("tools/indexer/find_code.py", ["--reindex"])
     
     # 2. 更新 AST 雙向呼叫圖
-    print("\n2️⃣ [2/4] 解析 AST 雙向呼叫圖 (Call Graph)...")
+    print("\n2️⃣ [2/5] 解析 AST 雙向呼叫圖 (Call Graph)...")
     run_script("tools/clis/call_graph.py", ["reindex"])
     
-    # 3. 自動編譯能力圖譜與符號錨點
-    print("\n3️⃣ [3/4] 編譯 Gen-2 能力契約圖譜 (Capability Graph)...")
+    # 3. 更新技能與程式碼雙向映射
+    print("\n3️⃣ [3/5] 構建技能員工與辦公工具雙向地圖 (Skill-Code Linker)...")
+    run_script("tools/indexer/skill_code_linker.py", ["--reindex"])
+    
+    # 4. 自動編譯能力圖譜與符號錨點
+    print("\n4️⃣ [4/5] 編譯 Gen-2 能力契約圖譜 (Capability Graph)...")
     run_script("tools/indexer/capability_compiler.py", ["compile"])
     
-    # 4. 檢查 Merkle Tree 增量狀態
-    print("\n4️⃣ [4/4] 檢查 Merkle Tree 增量狀態...")
+    # 5. 檢查 Merkle Tree 增量狀態
+    print("\n5️⃣ [5/5] 檢查 Merkle Tree 增量狀態...")
     run_script("tools/clis/merkle_tree.py", ["--diff"])
     
     print("\n✅ [agent_nav] 全系統索引與導航能力庫已全面更新完成！")
@@ -106,15 +114,23 @@ def main():
 
     # 8. file
     p_file = subparsers.add_parser("file", help="Fast file lookup via FILE_INDEX cache")
-    p_file.add_argument("query", help="Filename or keyword")
+    p_file.add_argument("query", nargs="?", default="", help="Filename or keyword")
     p_file.add_argument("-e", "--ext", help="File extension filter")
 
-    # 9. pref
+    # 9. skill (Skill -> Tools)
+    p_skill = subparsers.add_parser("skill", help="Find tools & code used by a skill/worker")
+    p_skill.add_argument("name", help="Skill name or keyword")
+
+    # 10. tool (Tool -> Skills)
+    p_tool = subparsers.add_parser("tool", help="Find skills/rules governing a code file")
+    p_tool.add_argument("path", help="Code file path")
+
+    # 11. pref
     p_pref = subparsers.add_parser("pref", help="Manage user preferences and memory")
     p_pref.add_argument("action", choices=["get", "set", "info"], help="pref action")
     p_pref.add_argument("args", nargs="*", help="Additional arguments for pref")
 
-    # 10. reindex
+    # 12. reindex
     subparsers.add_parser("reindex", help="Rebuild all indexes, call graphs and capability contracts")
 
     args = parser.parse_args()
@@ -152,10 +168,18 @@ def main():
         sys.exit(run_script("tools/clis/call_graph.py", ["trace", args.func_name]))
 
     elif args.command == "file":
-        fwd_args = [args.query]
+        fwd_args = []
+        if args.query:
+            fwd_args.append(args.query)
         if args.ext:
             fwd_args += ["-e", args.ext]
         sys.exit(run_script("tools/indexer/find_code.py", fwd_args))
+
+    elif args.command == "skill":
+        sys.exit(run_script("tools/indexer/skill_code_linker.py", ["-t", args.name]))
+
+    elif args.command == "tool":
+        sys.exit(run_script("tools/indexer/skill_code_linker.py", ["-s", args.path]))
 
     elif args.command == "pref":
         sys.exit(run_script("tools/indexer/user_pref.py", [args.action] + args.args))
